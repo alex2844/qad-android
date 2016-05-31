@@ -1,0 +1,8 @@
+<resources>
+	<style name="AppTheme" parent="android:Theme.Material">
+		<item name="android:colorPrimary">#D32F2F</item>
+		<item name="android:colorPrimaryDark">#D32F2F</item>
+		<item name="android:windowActionBar">false</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+</resources>
