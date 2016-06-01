@@ -6,6 +6,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends Activity {
 	private WebView mWebView;
@@ -25,6 +30,29 @@ public class MainActivity extends Activity {
 		@android.webkit.JavascriptInterface
 		public String getGreeting() {
 			return "Hello JavaScript!";
+		}
+		@android.webkit.JavascriptInterface
+		public  String getParse(String http) {
+			HttpURLConnection urlConnection = null;
+			BufferedReader reader = null;
+			String resultJson = "";
+			try {
+				URL url = new URL(http);
+				urlConnection = (HttpURLConnection) url.openConnection();
+				urlConnection.setRequestMethod("GET");
+				urlConnection.connect();
+				InputStream inputStream = urlConnection.getInputStream();
+				StringBuffer buffer = new StringBuffer();
+				reader = new BufferedReader(new InputStreamReader(inputStream));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					buffer.append(line);
+				}
+				resultJson = buffer.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return resultJson;
 		}
 	}
 	@Override
