@@ -1,3 +1,12 @@
+/*
+=====================================================
+Qad Android for Qad Framework (MainActivity.java)
+-----------------------------------------------------
+https://pcmasters.ml/
+-----------------------------------------------------
+Copyright (c) 2016 Alex Smith
+=====================================================
+*/
 package com.example.app;
 
 import android.app.Activity;
