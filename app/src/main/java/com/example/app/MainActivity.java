@@ -15,6 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
+import android.content.Intent;
+import android.net.Uri;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,20 +30,25 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mWebView = (WebView) findViewById(R.id.activity_main_webview);
-		mWebView.setWebViewClient(new WebViewClient());
 		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
 		mWebView.setWebChromeClient(new WebChromeClient());
+		mWebView.setWebViewClient(new WebViewClient());
 		mWebView.loadUrl("");
 	}
 	private class Qad {
+		@android.webkit.JavascriptInterface
+		public void open(String url) {
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			startActivity(intent);
+		}
 		@android.webkit.JavascriptInterface
 		public String getGreeting() {
 			return "Hello JavaScript!";
 		}
 		@android.webkit.JavascriptInterface
-		public  String getParse(String http) {
+		public String getParse(String http) {
 			HttpURLConnection urlConnection = null;
 			BufferedReader reader = null;
 			String resultJson = "";
