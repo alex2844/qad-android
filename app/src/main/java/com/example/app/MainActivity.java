@@ -44,10 +44,6 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		}
 		@android.webkit.JavascriptInterface
-		public String getGreeting() {
-			return "Hello JavaScript!";
-		}
-		@android.webkit.JavascriptInterface
 		public String getParse(String http) {
 			HttpURLConnection urlConnection = null;
 			BufferedReader reader = null;
