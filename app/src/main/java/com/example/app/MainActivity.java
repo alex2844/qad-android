@@ -24,18 +24,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends Activity {
-	private WebView web;
+	private WebView mWebView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		web = (WebView) findViewById(R.id.activity_main_webview);
-		WebSettings webSettings = web.getSettings();
+		mWebView = (WebView) findViewById(R.id.activity_main_webview);
+		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
-		web.addJavascriptInterface(new Qad(), "$$$");
-		web.setWebChromeClient(new WebChromeClient());
-		web.setWebViewClient(new WebViewClient());
-		web.loadUrl("");
+		mWebView.addJavascriptInterface(new Qad(), "$$$");
+		mWebView.setWebChromeClient(new WebChromeClient());
+		mWebView.setWebViewClient(new WebViewClient());
+		if (savedInstanceState == null)
+			mWebView.loadUrl("");
+	}
+	@Override
+	protected void onSaveInstanceState(Bundle outState ) {
+		super.onSaveInstanceState(outState);
+		mWebView.saveState(outState);
+	}
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		mWebView.restoreState(savedInstanceState);
 	}
 	private class Qad {
 		@android.webkit.JavascriptInterface
@@ -69,8 +80,8 @@ public class MainActivity extends Activity {
 	}
 	@Override
 	public void onBackPressed() {
-		if(web.canGoBack())
-			web.goBack();
+		if(mWebView.canGoBack())
+			mWebView.goBack();
 		else
 			super.onBackPressed();
 	}
