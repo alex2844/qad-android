@@ -8,8 +8,7 @@
         android:label="PCMasters"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.app.MainActivity"
-            android:screenOrientation="unspecified">
+            android:name="com.example.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
