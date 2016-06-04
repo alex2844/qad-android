@@ -24,18 +24,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends Activity {
-	private WebView mWebView;
+	private WebView web;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mWebView = (WebView) findViewById(R.id.activity_main_webview);
-		WebSettings webSettings = mWebView.getSettings();
+		web = (WebView) findViewById(R.id.activity_main_webview);
+		WebSettings webSettings = web.getSettings();
 		webSettings.setJavaScriptEnabled(true);
-		mWebView.addJavascriptInterface(new Qad(), "$$$");
-		mWebView.setWebChromeClient(new WebChromeClient());
-		mWebView.setWebViewClient(new WebViewClient());
-		mWebView.loadUrl("");
+		web.addJavascriptInterface(new Qad(), "$$$");
+		web.setWebChromeClient(new WebChromeClient());
+		web.setWebViewClient(new WebViewClient());
+		web.loadUrl("");
 	}
 	private class Qad {
 		@android.webkit.JavascriptInterface
@@ -73,8 +73,8 @@ public class MainActivity extends Activity {
 	}
 	@Override
 	public void onBackPressed() {
-		if(mWebView.canGoBack())
-			mWebView.goBack();
+		if(web.canGoBack())
+			web.goBack();
 		else
 			super.onBackPressed();
 	}
