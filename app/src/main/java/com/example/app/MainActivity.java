@@ -10,6 +10,8 @@ Copyright (c) 2016 Alex Smith
 package com.example.app;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -25,13 +27,17 @@ import java.net.URL;
 
 public class MainActivity extends Activity {
 	private WebView mWebView;
+	SharedPreferences sPref;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mWebView = (WebView) findViewById(R.id.activity_main_webview);
 		WebSettings webSettings = mWebView.getSettings();
+		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setJavaScriptEnabled(true);
+		webSettings.setDomStorageEnabled(true);
+		webSettings.setSupportZoom(false);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
 		mWebView.setWebChromeClient(new WebChromeClient());
 		mWebView.setWebViewClient(new WebViewClient());
@@ -53,6 +59,18 @@ public class MainActivity extends Activity {
 		public void open(String url) {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			startActivity(intent);
+		}
+		@android.webkit.JavascriptInterface
+		public void sconfig(String key, String value) {
+			sPref = getPreferences(MODE_PRIVATE);
+			Editor ed = sPref.edit();
+			ed.putString(key, value);
+			ed.commit();
+		}
+		@android.webkit.JavascriptInterface
+		public String lconfig(String key) {
+			sPref = getPreferences(MODE_PRIVATE);
+			return sPref.getString(key, "");
 		}
 		@android.webkit.JavascriptInterface
 		public String getParse(String http) {
