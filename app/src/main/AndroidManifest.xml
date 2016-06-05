@@ -9,7 +9,11 @@
 		android:theme="@style/AppTheme">
 		<activity
 			android:name="com.example.app.MainActivity"
-			android:screenOrientation="unspecified">
+			android:screenOrientation="unspecified"
+			android:configChanges="keyboardHidden|orientation|screenSize"
+			android:clearTaskOnLaunch="true"
+			android:noHistory="true"
+			android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
