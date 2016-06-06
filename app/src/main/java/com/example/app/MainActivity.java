@@ -10,6 +10,7 @@ Copyright (c) 2016 Alex Smith
 package com.example.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -17,7 +18,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
+import android.webkit.JsResult;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.net.Uri;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -39,8 +42,8 @@ public class MainActivity extends Activity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setSupportZoom(false);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
-		mWebView.setWebChromeClient(new WebChromeClient());
 		mWebView.setWebViewClient(new WebViewClient());
+		mWebView.setWebChromeClient(new JsWebChromeClient());
 		if (savedInstanceState == null)
 			mWebView.loadUrl("");
 	}
@@ -102,5 +105,27 @@ public class MainActivity extends Activity {
 			mWebView.goBack();
 		else
 			super.onBackPressed();
+	}
+	private class JsWebChromeClient extends WebChromeClient {
+		@Override
+		public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
+				.setTitle(view.getTitle())
+				.setMessage(message)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						result.confirm();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						result.cancel();
+					}
+				});
+			b.show();
+			return true;
+		}
 	}
 }
