@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setSupportZoom(false);
+		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
 		mWebView.setWebViewClient(new WebViewClient());
 		mWebView.setWebChromeClient(new JsWebChromeClient());
@@ -103,10 +104,29 @@ public class MainActivity extends Activity {
 	public void onBackPressed() {
 		if(mWebView.canGoBack())
 			mWebView.goBack();
-		else
+		else{
+			sPref = getPreferences(MODE_PRIVATE);
+			Editor ed = sPref.edit();
+			ed.putString("state", "");
+			ed.commit();
 			super.onBackPressed();
+		}
 	}
 	private class JsWebChromeClient extends WebChromeClient {
+		@Override
+		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
+				.setTitle(view.getTitle())
+				.setMessage(message)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						result.confirm();
+					}
+				});
+			b.show();
+			return true;
+		}
 		@Override
 		public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
 			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
