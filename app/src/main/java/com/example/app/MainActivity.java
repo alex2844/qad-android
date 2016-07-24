@@ -22,6 +22,7 @@ import android.webkit.JsResult;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.view.View;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setSupportZoom(false);
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+		mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
 		mWebView.setWebViewClient(new WebViewClient());
 		mWebView.setWebChromeClient(new JsWebChromeClient());
