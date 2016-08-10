@@ -79,6 +79,29 @@ public class MainActivity extends Activity {
 			return sPref.getString(key, "");
 		}
 		@android.webkit.JavascriptInterface
+		public String sh(String exec, boolean su) {
+			String data = "";
+			try {
+				Process process;
+				if (su)
+					process = Runtime.getRuntime().exec(new String[] {"su", "-c", exec});
+				else
+					process = Runtime.getRuntime().exec(exec);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				int read;
+				char[] buffer = new char[4096];
+				StringBuffer output = new StringBuffer();
+				while ((read = reader.read(buffer)) > 0)
+					output.append(buffer, 0, read);
+				reader.close();
+				process.waitFor();
+				data = output.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return data;
+		}
+		@android.webkit.JavascriptInterface
 		public String getParse(String http) {
 			HttpURLConnection urlConnection = null;
 			BufferedReader reader = null;
