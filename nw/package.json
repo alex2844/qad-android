@@ -1,0 +1,28 @@
+{
+  "main": "page/@project/index.html",
+  "name": "@project",
+  "description": "@title",
+  "version": "0.0.1",
+  "keywords": [ "demo", "nwjs" ],
+  "window": {
+    "title": "@title",
+    "icon": "icon.png",
+    "frame": true,
+    "width": 700,
+    "height": 400,
+    "position": "mouse",
+    "min_width": 400,
+    "min_height": 200,
+    "max_width": 800,
+    "max_height": 600
+  },
+  "author": "nedudi",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.x",
+    "nw-builder": "^2.x"
+  },
+  "dependencies": {
+    "gulp-util": "^2.2.14"
+  }
+}
