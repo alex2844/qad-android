@@ -8,13 +8,9 @@
     "title": "@title",
     "icon": "icon.png",
     "frame": true,
-    "width": 700,
-    "height": 400,
     "position": "mouse",
     "min_width": 400,
-    "min_height": 200,
-    "max_width": 800,
-    "max_height": 600
+    "min_height": 200
   },
   "author": "nedudi",
   "license": "MIT",
