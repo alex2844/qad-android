@@ -2,7 +2,7 @@
   "main": "page/@project/index.html",
   "name": "@project",
   "description": "@title",
-  "version": "0.0.1",
+  "version": "@version",
   "keywords": [ "demo", "nwjs" ],
   "window": {
     "title": "@title",
