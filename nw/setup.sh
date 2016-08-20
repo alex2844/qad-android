@@ -26,6 +26,10 @@ if [ ! -e "/opt/$company/$app" ]; then
 	fi
 	mkdir -p /opt/$company/$app;
 	cp -r * /opt/$company/$app/;
+	cp -r * /opt/$company/$app/;
+	find /opt/$company -type f -exec chmod 0644 {} +;
+	find /opt/$company -type d -exec chmod 0755 {} +;
+	chmod +x /opt/$company/$app/app
 	if [ -e "/usr/bin/zenity" ]; then
 		zenity --info --title $title --text 'Установка '$title' завершена' --window-icon=icon.png;
 	else
