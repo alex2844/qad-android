@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=@version
+Encoding=UTF-8
+Name=@title
+Exec=ice
+Icon=/opt/@company/@project/icon.png
+Terminal=false
+Type=Application
+Categories=GTK;Network;
+StartupNotify=false
+Name[ru]=app.desktop
