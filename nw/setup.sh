@@ -27,6 +27,7 @@ if [ ! -e "/opt/$company/$app" ]; then
 	mkdir -p /opt/$company/$app;
 	cp -r * /opt/$company/$app/;
 	cp -r * /opt/$company/$app/;
+	mv /opt/$company/$app/app.desktop /usr/share/applications/$app.desktop;
 	find /opt/$company -type f -exec chmod 0644 {} \;
 	find /opt/$company -type d -exec chmod 0755 {} \;
 	find /opt/$company -name 'app' -exec chmod 0777 {} \;
@@ -50,6 +51,7 @@ else
 		fi
 	fi
 	rm -r /opt/$company/$app;
+	rm /usr/share/applications/$app.desktop;
 	if [ -e "/usr/bin/zenity" ]; then
 		zenity --info --title $title --text 'Удаление '$title' завершено' --window-icon=icon.png;
 	else
