@@ -31,7 +31,7 @@ if [ ! -e "/opt/$company/$app" ]; then
 	find /opt/$company -type f -exec chmod 0644 {} \;
 	find /opt/$company -type d -exec chmod 0755 {} \;
 	find /opt/$company -name 'app' -exec chmod 0777 {} \;
-	#chmod +x /opt/$company/$app/app
+	chmod 0777 /usr/share/applications/$app.desktop;
 	if [ -e "/usr/bin/zenity" ]; then
 		zenity --info --title $title --text 'Установка '$title' завершена' --window-icon=icon.png;
 	else
