@@ -2,10 +2,9 @@
 Version=@version
 Encoding=UTF-8
 Name=@title
-Exec=ice
+Exec=/opt/@company/@project/app
 Icon=/opt/@company/@project/icon.png
 Terminal=false
 Type=Application
 Categories=GTK;Network;
 StartupNotify=false
-Name[ru]=app.desktop
