@@ -41,6 +41,8 @@ public class MainActivity extends Activity {
 		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
+		webSettings.setDatabaseEnabled(true);
+		webSettings.setDatabasePath("/data/data/"+this.getPackageName()+"/databases/");
 		webSettings.setSupportZoom(false);
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
