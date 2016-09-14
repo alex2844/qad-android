@@ -11,38 +11,37 @@ package com.example.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 import android.webkit.JsResult;
-import android.content.Intent;
-import android.content.DialogInterface;
-import android.net.Uri;
-import android.view.View;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class MainActivity extends Activity {
 	private WebView mWebView;
-	SharedPreferences sPref;
+	private ProgressDialog progressBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mWebView = (WebView) findViewById(R.id.activity_main_webview);
+		mWebView = (WebView)findViewById(R.id.activity_main_webview);
 		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setDatabaseEnabled(true);
-		webSettings.setDatabasePath("/data/data/"+this.getPackageName()+"/databases/");
+		webSettings.setDatabasePath("/data/data/"+getPackageName()+"/databases/");
 		webSettings.setSupportZoom(false);
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -50,7 +49,11 @@ public class MainActivity extends Activity {
 		mWebView.setWebViewClient(new WebViewClient());
 		mWebView.setWebChromeClient(new JsWebChromeClient());
 		if (savedInstanceState == null)
-			mWebView.loadUrl("");
+			mWebView.loadUrl("file:///android_asset/www/page/rbook/index.html");
+		progressBar = new ProgressDialog(this);
+		progressBar.setIndeterminate(true);
+		progressBar.setCancelable(false);
+		progressBar.setMessage("Loading");
 	}
 	@Override
 	protected void onSaveInstanceState(Bundle outState ) {
@@ -64,24 +67,19 @@ public class MainActivity extends Activity {
 	}
 	private class Qad {
 		@android.webkit.JavascriptInterface
+		public void onload(boolean show) {
+			if (show)
+				progressBar.hide();
+			else
+				progressBar.show();
+		}
+		@android.webkit.JavascriptInterface
 		public void open(String url) {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			startActivity(intent);
 		}
 		@android.webkit.JavascriptInterface
-		public void sconfig(String key, String value) {
-			sPref = getPreferences(MODE_PRIVATE);
-			Editor ed = sPref.edit();
-			ed.putString(key, value);
-			ed.commit();
-		}
-		@android.webkit.JavascriptInterface
-		public String lconfig(String key) {
-			sPref = getPreferences(MODE_PRIVATE);
-			return sPref.getString(key, "");
-		}
-		@android.webkit.JavascriptInterface
-		public String sh(String exec, boolean su) {
+		public String shell(String exec, boolean su) {
 			String data = "";
 			try {
 				Process process;
@@ -104,40 +102,27 @@ public class MainActivity extends Activity {
 			return data;
 		}
 		@android.webkit.JavascriptInterface
-		public String getParse(String http) {
-			HttpURLConnection urlConnection = null;
-			BufferedReader reader = null;
-			String resultJson = "";
+		public String curl(String http) {
+			String result = "";
 			try {
 				URL url = new URL(http);
-				urlConnection = (HttpURLConnection) url.openConnection();
-				urlConnection.setRequestMethod("GET");
-				urlConnection.connect();
-				InputStream inputStream = urlConnection.getInputStream();
-				StringBuffer buffer = new StringBuffer();
-				reader = new BufferedReader(new InputStreamReader(inputStream));
+				URLConnection conn = url.openConnection();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				String line;
-				while ((line = reader.readLine()) != null) {
-					buffer.append(line);
-				}
-				resultJson = buffer.toString();
+				while ((line = reader.readLine()) != null)
+					result = line;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return resultJson;
+			return result;
 		}
 	}
 	@Override
 	public void onBackPressed() {
 		if(mWebView.canGoBack())
 			mWebView.goBack();
-		else{
-			sPref = getPreferences(MODE_PRIVATE);
-			Editor ed = sPref.edit();
-			ed.putString("state", "");
-			ed.commit();
+		else
 			super.onBackPressed();
-		}
 	}
 	private class JsWebChromeClient extends WebChromeClient {
 		@Override
@@ -152,6 +137,7 @@ public class MainActivity extends Activity {
 					}
 				});
 			b.show();
+			result.cancel();
 			return true;
 		}
 		@Override
