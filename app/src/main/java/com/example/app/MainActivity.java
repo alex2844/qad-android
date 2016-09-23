@@ -52,6 +52,10 @@ public class MainActivity extends Activity {
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
 		mWebView.setWebViewClient(new WebViewClient());
 		mWebView.setWebChromeClient(new JsWebChromeClient());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+			if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)) {
+				WebView.setWebContentsDebuggingEnabled(true);
+			}
 		if (savedInstanceState == null)
 			mWebView.loadUrl("file:///android_asset/www/page/rbook/index.html");
 		progressBar = new ProgressDialog(this);
