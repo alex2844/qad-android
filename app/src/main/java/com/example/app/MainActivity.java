@@ -136,6 +136,20 @@ public class MainActivity extends Activity {
 		else
 			super.onBackPressed();
 	}
+	private class CancelListener implements DialogInterface.OnCancelListener, DialogInterface.OnClickListener {
+		CancelListener(JsResult result) {
+			mResult = result;
+		}
+		private final JsResult mResult;
+		@Override
+		public void onCancel(DialogInterface dialog) {
+			mResult.cancel();
+		}
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			mResult.cancel();
+		}
+	}
 	private class JsWebChromeClient extends WebChromeClient {
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
