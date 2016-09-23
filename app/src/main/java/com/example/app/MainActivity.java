@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
 		webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 		mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 		mWebView.addJavascriptInterface(new Qad(), "$$$");
-		mWebView.setWebViewClient(new WebViewClient());
+		mWebView.setWebViewClient(new JsWebViewClient());
 		mWebView.setWebChromeClient(new JsWebChromeClient());
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 			if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)) {
@@ -208,6 +208,11 @@ public class MainActivity extends Activity {
 			});
 			b.show();
 			return true;
+		}
+	}
+	private class JsWebViewClient extends WebViewClient {
+		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+			mWebView.loadData("<body style=\"background: #f1f1f1;margin-top: calc(50vh - 22px);\"><div style=\"background:#F44336;border-radius: 0.125rem;box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);\"><h2 style=\"color: white;font-weight: 300;text-align: center;font-size: 18px;margin: 0;padding: 8px 0;line-height: 28px;\">Error conection</h2></div></body>", "text/html", "utf-8");
 		}
 	}
 }
