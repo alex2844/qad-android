@@ -186,5 +186,28 @@ public class MainActivity extends Activity {
 			b.show();
 			return true;
 		}
+		@Override
+		public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+			final EditText data = new EditText(view.getContext());
+			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
+			.setTitle(view.getTitle())
+			.setView(data)
+			.setMessage(message)
+			.setOnCancelListener(new CancelListener(result))
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					result.confirm(data.getText().toString());
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					result.cancel();
+				}
+			});
+			b.show();
+			return true;
+		}
 	}
 }
