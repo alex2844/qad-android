@@ -82,6 +82,10 @@ public class MainActivity extends Activity {
 				progressBar.show();
 		}
 		@android.webkit.JavascriptInterface
+		public int sdk() {
+			return Build.VERSION.SDK_INT;
+		}
+		@android.webkit.JavascriptInterface
 		public void open(String url) {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			startActivity(intent);
