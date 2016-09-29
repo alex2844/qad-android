@@ -29,8 +29,9 @@ import android.widget.EditText;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.net.URLConnection;
+import java.net.HttpURLConnection;
 
 public class MainActivity extends Activity {
 	private WebView mWebView;
@@ -114,15 +115,32 @@ public class MainActivity extends Activity {
 			return data;
 		}
 		@android.webkit.JavascriptInterface
-		public String curl(String http) {
+		public String curl(String method, String url) {
 			String result = "";
 			try {
-				URL url = new URL(http);
-				URLConnection conn = url.openConnection();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				URL parse = new URL(url);
+				HttpURLConnection request;
+				if (method.equals("POST")) {
+					URL post = new URL(parse.getProtocol()+"://"+parse.getHost()+parse.getPath());
+					String query = parse.getQuery();
+					request = (HttpURLConnection) post.openConnection();
+					request.setRequestMethod("POST");
+					request.setDoOutput(true);
+					request.addRequestProperty("Content-Length", Integer.toString(query.length()));
+					request.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+					OutputStreamWriter writer = new OutputStreamWriter(request.getOutputStream());
+					writer.write(query);
+					writer.flush();
+				}else{
+					request = (HttpURLConnection) parse.openConnection();
+					request.setRequestMethod(method);
+				}
+				BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String line;
+				StringBuffer output = new StringBuffer();
 				while ((line = reader.readLine()) != null)
-					result = line;
+					output.append(line);
+				result = output.toString();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
