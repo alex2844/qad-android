@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 				WebView.setWebContentsDebuggingEnabled(true);
 			}
 		if (savedInstanceState == null)
-			mWebView.loadUrl("file:///android_asset/www/page/rbook/index.html");
+			mWebView.loadUrl("");
 		progressBar = new ProgressDialog(this);
 		progressBar.setIndeterminate(true);
 		progressBar.setCancelable(false);
