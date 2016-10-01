@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -36,6 +37,9 @@ import java.net.HttpURLConnection;
 public class MainActivity extends Activity {
 	private WebView mWebView;
 	private ProgressDialog progressBar;
+	private ValueCallback<Uri> FilePathKitkat;
+	private ValueCallback<Uri[]> FilePathLollipop;
+	private final static int FILE_SELECTED = 1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +67,36 @@ public class MainActivity extends Activity {
 		progressBar.setIndeterminate(true);
 		progressBar.setCancelable(false);
 		progressBar.setMessage("Loading");
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == FILE_SELECTED) {
+			if (resultCode == RESULT_OK) {
+				if (intent != null) {
+					if (FilePathKitkat != null) {
+						FilePathKitkat.onReceiveValue(intent.getData());
+						FilePathKitkat = null;
+					}else if (FilePathLollipop != null) {
+						Uri[] results;
+						try {
+							results = new Uri[] { Uri.parse(intent.getDataString()) };
+						} catch (Exception e) {
+							results = null;
+						}
+						FilePathLollipop.onReceiveValue(results);
+						FilePathLollipop = null;
+					}
+				}
+			}else{
+				if (FilePathKitkat != null) {
+					FilePathKitkat.onReceiveValue(null);
+					FilePathKitkat = null;
+				}else if (FilePathLollipop != null) {
+					FilePathLollipop.onReceiveValue(null);
+					FilePathLollipop = null;
+				}
+			}
+		}
 	}
 	@Override
 	protected void onSaveInstanceState(Bundle outState ) {
@@ -169,6 +203,23 @@ public class MainActivity extends Activity {
 		}
 	}
 	private class JsWebChromeClient extends WebChromeClient {
+		public void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture){
+			FilePathKitkat = filePathCallback;
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType((acceptType.length() == 0 ? "*/*" : acceptType));
+			startActivityForResult(intent, FILE_SELECTED);
+		}
+		@Override
+		public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+			FilePathLollipop = filePathCallback;
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			if (fileChooserParams != null && fileChooserParams.getAcceptTypes() != null && fileChooserParams.getAcceptTypes().length > 0)
+				intent.setType(fileChooserParams.getAcceptTypes()[0]);
+			else
+				intent.setType("*/*");
+			startActivityForResult(intent, FILE_SELECTED);
+			return true;
+		}
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
 			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
