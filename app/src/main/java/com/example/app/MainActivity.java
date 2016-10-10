@@ -15,6 +15,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity {
 	private ValueCallback<Uri> FilePathKitkat;
 	private ValueCallback<Uri[]> FilePathLollipop;
 	private final static int FILE_SELECTED = 1;
+	private SharedPreferences Settings;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -152,12 +155,15 @@ public class MainActivity extends Activity {
 		public String curl(String method, String url) {
 			String result = "";
 			try {
+				Settings = getPreferences(MODE_PRIVATE);
 				URL parse = new URL(url);
 				HttpURLConnection request;
 				if (method.equals("POST")) {
 					URL post = new URL(parse.getProtocol()+"://"+parse.getHost()+parse.getPath());
 					String query = parse.getQuery();
 					request = (HttpURLConnection) post.openConnection();
+					if (Settings.contains("session"))
+						request.setRequestProperty("Cookie", Settings.getString("session", ""));
 					request.setRequestMethod("POST");
 					request.setDoOutput(true);
 					request.addRequestProperty("Content-Length", Integer.toString(query.length()));
@@ -167,7 +173,17 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}else{
 					request = (HttpURLConnection) parse.openConnection();
+					if (Settings.contains("session"))
+						request.setRequestProperty("Cookie", Settings.getString("session", ""));
 					request.setRequestMethod(method);
+				}
+				if (request.getHeaderField("Set-cookie") != null) {
+					String session = request.getHeaderField("Set-cookie").split(";")[0];
+					if (session.contains("PHPSESSID")) {
+						Editor save = Settings.edit();
+						save.putString("session", session);
+						save.commit();
+					}
 				}
 				BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String line;
