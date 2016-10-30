@@ -1,5 +1,14 @@
 #!/bin/bash
-company='qwedl';
+#/*
+#=====================================================
+# Qad Make for Qad Framework (setup.sh)
+#-----------------------------------------------------
+# https://pcmasters.ml/
+#-----------------------------------------------------
+# Copyright (c) 2016 Alex Smith
+#=====================================================
+#*/
+company='pcmasters';
 app='@project';
 version='@version';
 title='@title';

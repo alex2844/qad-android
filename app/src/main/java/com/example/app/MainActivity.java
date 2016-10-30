@@ -1,6 +1,6 @@
 /*
 =====================================================
-Qad Android for Qad Framework (MainActivity.java)
+Qad Make for Qad Framework (MainActivity.java)
 -----------------------------------------------------
 https://pcmasters.ml/
 -----------------------------------------------------
