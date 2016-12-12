@@ -9,6 +9,8 @@ Copyright (c) 2016 Alex Smith
 */
 package com.example.app;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -127,6 +129,19 @@ public class MainActivity extends Activity {
 		public void open(String url) {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			startActivity(intent);
+		}
+		@android.webkit.JavascriptInterface
+		public String account() {
+			String ac = "";
+			try {
+				AccountManager am = AccountManager.get(mContext);
+				Account[] accounts = am.getAccounts();
+				for (Account account : accounts) {
+					ac += account.toString();
+				}
+			} catch (Exception e) {
+			}
+			return ac;
 		}
 		@android.webkit.JavascriptInterface
 		public String shell(String exec, boolean su) {
