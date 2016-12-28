@@ -20,9 +20,14 @@ if (!empty($_GET['page'])) {
 		'/&page=/',
 		'/page=/'
 	],'',$_SERVER['QUERY_STRING']);
-	if ($method == 'GET')
-		$res = file_get_contents($parse);
-	else{
+	if ($method == 'GET') {
+		$opts = ['http' => [
+			'method' => 'GET',
+			'header' => 'Cookie: PHPSESSID='.$_COOKIE['session']
+		]];
+		$context = stream_context_create($opts);
+		$res = file_get_contents($parse, 0, $context);
+	}else{
 		$parse = parse_url($parse);
 		$opts = ['http' => [
 			'method'  => $method,
