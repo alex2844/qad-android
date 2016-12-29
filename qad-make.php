@@ -22,9 +22,10 @@ if (!empty($_GET['page'])) {
 	],'',$_SERVER['QUERY_STRING']);
 	if ($method == 'GET') {
 		$opts = ['http' => [
-			'method' => 'GET',
-			'header' => 'Cookie: PHPSESSID='.$_COOKIE['session']
+			'method' => 'GET'
 		]];
+		if (isset($_COOKIE['session']))
+			$opts['http']['header'] = 'Cookie: PHPSESSID='.$_COOKIE['session'];
 		$context = stream_context_create($opts);
 		$res = file_get_contents($parse, 0, $context);
 	}else{
