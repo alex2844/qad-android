@@ -289,6 +289,7 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
 			final EditText data = new EditText(view.getContext());
+			data.setText(defaultValue);
 			AlertDialog.Builder b = new AlertDialog.Builder(view.getContext())
 			.setTitle(view.getTitle())
 			.setView(data)
