@@ -3,7 +3,7 @@
 =====================================================
 Mysql remote client for Qad Admin (qad-admin-mysql.php)
 -----------------------------------------------------
-https://dev.pcmasters.ml/admin.html
+http://qad.qwedl.com/admin.html
 -----------------------------------------------------
 Copyright (c) 2016 Alex Smith
 =====================================================

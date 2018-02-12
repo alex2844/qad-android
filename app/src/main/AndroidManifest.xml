@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.example.app" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.app" >
 	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 	<application
 		android:allowBackup="true"
+		android:banner="@drawable/ic_banner"
 		android:icon="@drawable/ic_launcher"
 		android:roundIcon="@drawable/ic_launcher_round"
-		android:label="PCMasters"
+		android:label="Qwedl Movies"
 		android:theme="@style/AppTheme">
 		<activity
 			android:name="com.example.app.MainActivity"
@@ -17,6 +18,13 @@
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
+				<category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="com.qwedl.movies" />
 			</intent-filter>
 		</activity>
 	</application>
