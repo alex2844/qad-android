@@ -7,5 +7,13 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:scrollbarSize="5dp"
-		android:scrollbarThumbVertical="@color/scroll" />
+		android:scrollbarThumbVertical="@color/scroll"
+	/>
+	<FrameLayout
+		android:id="@+id/fullscreen_container"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="@android:color/black"
+		android:visibility="gone"
+	/>
 </RelativeLayout>
